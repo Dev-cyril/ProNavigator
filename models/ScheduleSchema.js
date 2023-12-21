@@ -6,9 +6,14 @@ const schedule = new mongoose.Schema({
     required: true
   },
   deadline: {
-    type: Date,
+    type: String,
     required: true
+  },
+  status: String,
+  user: {
+    type: [String]
   }
 });
 
-export const Schedule = mongoose.model('Schedule', schedule);
+const Schedule = mongoose.model('Schedule', schedule);
+module.exports = Schedule;

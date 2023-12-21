@@ -17,16 +17,29 @@ const QueryAllUsers = () => {
 
 // create a new user
 const CreateNewUser = (firstName, lastName, email, password) => {
-  return UserSchema.create({firstName: firstName,
-                           lastName: lastName,
-                           email: email,
-                           password: password})
+  return UserSchema.create(
+    {firstName: firstName,
+     lastName: lastName,
+     email: email,
+     password: password
+    }
+  )
 }
 
 //update a user
+const UpdateUserById = (id, update) => {
+  return UserSchema.findOneAndUpdate(
+    {_id: id},
+    {$set: update},
+    { new: true })
+}
 
 //delete a user by id
+const RemoveById = (userId) => {
+  return UserSchema.findByIdAndDelete(userId)
+}
+
 
 module.exports = {
-  QueryAllUsers, QueryByEmail, QueryById, CreateNewUser
+  QueryAllUsers, QueryByEmail, QueryById, CreateNewUser, RemoveById, UpdateUserById
 }

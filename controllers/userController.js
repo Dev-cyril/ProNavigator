@@ -2,7 +2,8 @@ const {
   QueryByEmail,
   QueryById,
   QueryAllUsers,
-  CreateNewUser
+  CreateNewUser,
+  RemoveById, UpdateUserById
 } = require('../services/User');
 
 // create a new user
@@ -53,15 +54,13 @@ const GetUserByEmail = async (req, res) => {
 const GetUserById = async (req, res) => {
   try {
     const { _id } = req.params;
-    const user = await QueryById(_id);
-
+    const user = await QueryById(_id).populate('projects');
     if (user) {
       return res.status(200).json({
         message: 'User found',
         user: user
       });
     }
-
     res.status(404).json({ message: 'User not found' });
   } catch (err) {
     console.error(err);
@@ -69,8 +68,57 @@ const GetUserById = async (req, res) => {
   }
 };
 
+// update user info
+const UpdateUser = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const user = await QueryById(_id);
+    if (user) {
+      if (!req.body) {
+        return res.status(400).json({ message: 'Key value pair cannot be null' });
+      }
+
+      const updateObject = { ...req.body };
+
+      const updatedUser = await UpdateUserById(_id, updateObject);
+
+      if (updatedUser) {
+        return res.status(200).json(updatedUser);
+      }
+
+      return res.status(400).json({ message: 'Error updating user' });
+    }
+
+    return res.status(404).json({ message: 'User not found' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Error updating user' });
+  }
+};
+
+//delete user
+const DeleteUser = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const user = await QueryById(_id);
+
+    if (user) {
+      const deletedUser = await RemoveById(_id);
+      res.status(200).json({ message: 'User deleted', deletedUser });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error deleting user', error: err.message });
+  }
+};
+
+
 module.exports = {
   CreateUser,
   GetUserById,
-  GetUserByEmail
+  GetUserByEmail,
+  UpdateUser,
+  DeleteUser
 };

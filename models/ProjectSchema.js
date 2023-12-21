@@ -9,8 +9,8 @@ const projects = new mongoose.Schema({
     type: String,
     required: true
   },
-  schedule: [{type: mongoose.schema.Types.ObjectId,
-              ref:'Schedule'}]
+  schedule: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Schedule', autopopulate: true }],
 });
 
-export const Projects = mongoose.model('Projects', projects);
+const Projects = mongoose.model('Projects', projects);
+module.exports = Projects;

@@ -54,7 +54,14 @@ const GetUserByEmail = async (req, res) => {
 const GetUserById = async (req, res) => {
   try {
     const { _id } = req.params;
-    const user = await QueryById(_id).populate('projects');
+    const user = await QueryById(_id).populate({
+        path: 'projects',
+        populate: {
+          path: 'schedule',
+          model: 'Schedule', 
+        },
+      })
+      .exec();;
     if (user) {
       return res.status(200).json({
         message: 'User found',

@@ -9,7 +9,8 @@ const projects = new mongoose.Schema({
     type: String,
     required: true
   },
-  schedule: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Schedule', autopopulate: true }],
+  created_at: Date,
+  schedule: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Schedule' }],
 });
 
 const Projects = mongoose.model('Projects', projects);

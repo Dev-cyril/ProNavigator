@@ -12,7 +12,8 @@ const schedule = new mongoose.Schema({
   status: String,
   user: {
     type: [String]
-  }
+  },
+  created_at: Date,
 });
 
 const Schedule = mongoose.model('Schedule', schedule);

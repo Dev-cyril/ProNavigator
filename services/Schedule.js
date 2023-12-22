@@ -5,6 +5,11 @@ const CreateSchedule = (object) => {
   return Schedule.create(object)
 }
 
+//query schedule db
+const QueryScheduleById = (id) => {
+  return Schedule.findById({_id: id})
+}
+
 //updated a schedule
 const UpdateSchedule = (scheduleId, update) => {
   return Schedule.findOneAndUpdate(
@@ -21,5 +26,6 @@ const RemoveById = (scheduleId) => {
 module.exports = {
   CreateSchedule,
   UpdateSchedule,
-  RemoveById
+  RemoveById,
+  QueryScheduleById
 }

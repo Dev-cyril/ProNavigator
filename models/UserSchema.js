@@ -17,7 +17,7 @@ const users = new mongoose.Schema({
     type: String,
     required: true
   },
-  projects: [{type: mongoose.Schema.Types.ObjectId, ref: "Projects", autopopulate: true}]
+  projects: [{type: mongoose.Schema.Types.ObjectId, ref: "Projects"}]
 });
 
 const UserModel = mongoose.model('UserModel', users);

@@ -7,7 +7,7 @@ const {QueryById} = require('../services/User')
 // create a new Project
 const Createproject = async (req, res) => {
   try {
-    const user = await QueryById(req.params._id);
+    const user = await QueryById(req.params).populate('projects').exec();
 
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
@@ -18,12 +18,13 @@ const Createproject = async (req, res) => {
     if (!description || !title) {
       return res.status(400).json({ message: 'Both "description" and "title" are required in the request body' });
     }
-
     const newProject = await CreateNewProject({
       description: description,
       title: title,
+      created_at: new Date(),
     });
 
+    console.log(user)
     user.projects.push(newProject);
     await user.save();
 
@@ -38,7 +39,8 @@ const Createproject = async (req, res) => {
 // fetch a project
 const GetProject = async (req, res) => {
   try{
-    const project = await QueryProjectById(req.params);
+    const project = await QueryProjectById(req.params)
+      .populate('schedule').exec();
     if (!project) {
       res.status(404).json({message: "Project not found"});
     }

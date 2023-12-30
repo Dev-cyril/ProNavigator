@@ -5,6 +5,7 @@ const {
   CreateNewUser,
   RemoveById, UpdateUserById
 } = require('../services/User');
+const {RemoveProjectById} = require('../services/Projects')
 
 // create a new user
 const CreateUser = async (req, res) => {
@@ -22,7 +23,7 @@ const CreateUser = async (req, res) => {
 
     res.status(200).json({
       message: 'User created successfully',
-      user: newUser
+      user: {_id: newUser._id, email: newUser.email}
     });
   } catch (err) {
     console.error(err);
@@ -110,6 +111,12 @@ const DeleteUser = async (req, res) => {
     const user = await QueryById(_id);
 
     if (user) {
+      const projectToDelete = user.projects;
+      if(projectToDelete.length > 0){
+        for (const project of projectToDelete) {
+          await RemoveProjectById(project._id);
+        } 
+      }
       const deletedUser = await RemoveById(_id);
       res.status(200).json({ message: 'User deleted', deletedUser });
     } else {

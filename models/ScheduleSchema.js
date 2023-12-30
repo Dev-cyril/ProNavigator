@@ -14,6 +14,7 @@ const schedule = new mongoose.Schema({
     type: [String]
   },
   created_at: Date,
+  updated_at: {type: Date, required: false}
 });
 
 const Schedule = mongoose.model('Schedule', schedule);

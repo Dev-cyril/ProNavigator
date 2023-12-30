@@ -10,6 +10,7 @@ const projects = new mongoose.Schema({
     required: true
   },
   created_at: Date,
+  updated_at: {type: Date, required:false},
   schedule: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Schedule' }],
 });
 

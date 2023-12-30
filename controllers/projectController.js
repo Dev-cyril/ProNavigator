@@ -2,6 +2,7 @@ const {CreateNewProject,
        QueryProjectById,
          UpdateProject,
          RemoveById} = require('../services/Projects')
+const {RemoveScheduleById} = require('../services/Schedule')
 const {QueryById} = require('../services/User')
 
 // create a new Project
@@ -23,13 +24,11 @@ const Createproject = async (req, res) => {
       title: title,
       created_at: new Date(),
     });
-
-    console.log(user)
+    
     user.projects.push(newProject);
     await user.save();
 
-    console.log('Project created successfully');
-    res.status(200).json(newProject);
+    res.status(200).json({message: "Project created succesfully", newProject});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error creating project', error: err.message });
@@ -64,16 +63,15 @@ const UpdateAProject = async (req, res) => {
       return res.status(400).json({ message: 'Key value pair cannot be null or empty' });
     }
 
-    const updateObject = { ...req.body };
+    const updateObject = { ...req.body, updated_at: new Date() };
 
     const updatedProject = await UpdateProject(project._id, updateObject);
-    res.status(200).json(updatedProject);
+    res.status(200).json({message: "Update successful", updatedProject});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error updating project', error: err.message });
   }
 };
-
 
 //delete a project
 const DeleteProject = async (req, res) => {
@@ -83,7 +81,25 @@ const DeleteProject = async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
-
+    // console.log(userModel)
+    // const users = await UserModel.find(project)
+    // console.log(users)
+    // res.json("Done")
+    // if(users.length >0){
+    //   for(const user of users){
+    //     const index = user.projects.findIndex(proj => proj._id.toString() === req.params._id);
+    //     if(index !== -1){
+    //       user.projects.splice(index, 1);
+    //       await user.save()
+    //     }
+    //   }
+    // }
+    const schedulesToDelete = project.schedule;
+    if(schedulesToDelete.length > 0){
+      for (const schedule of schedulesToDelete) {
+        await RemoveScheduleById(schedule._id);
+      } 
+    }
     const deletedProject = await RemoveById(project._id);
     res.status(200).json({ message: 'Project deleted', deletedProject });
   } catch (err) {

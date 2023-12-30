@@ -19,13 +19,13 @@ const UpdateSchedule = (scheduleId, update) => {
 }
 
 //delete schedule
-const RemoveById = (scheduleId) => {
-  return projectId.findByIdAndDelete(scheduleId)
+const RemoveScheduleById = (scheduleId) => {
+  return Schedule.findByIdAndDelete(scheduleId)
 }
 
 module.exports = {
   CreateSchedule,
   UpdateSchedule,
-  RemoveById,
+  RemoveScheduleById,
   QueryScheduleById
 }
